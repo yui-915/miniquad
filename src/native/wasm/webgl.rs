@@ -311,6 +311,7 @@ pub struct __GLsync {
 }
 pub type GLsync = *mut __GLsync;
 
+#[cfg(not(target_os = "emscripten"))]
 extern "C" {
     pub fn glActiveTexture(texture: GLenum);
     pub fn glAttachShader(program: GLuint, shader: GLuint);
@@ -984,6 +985,2052 @@ extern "C" {
         bufSize: GLsizei,
         params: *mut GLint,
     );
+}
+
+#[cfg(target_os = "emscripten")]
+pub use self::emscripten_exports::*;
+#[cfg(target_os = "emscripten")]
+mod emscripten_exports {
+    use super::super::eval;
+    use super::*;
+
+    pub unsafe fn glActiveTexture(texture: GLenum) {
+        eval(format!("importObject.env.glActiveTexture({})", texture))
+    }
+
+    pub unsafe fn glAttachShader(program: GLuint, shader: GLuint) {
+        eval(format!(
+            "importObject.env.glAttachShader({},{})",
+            program, shader
+        ))
+    }
+
+    pub unsafe fn glBindAttribLocation(program: GLuint, index: GLuint, name: *const GLchar) {
+        eval(format!(
+            "importObject.env.glBindAttribLocation({},{},{})",
+            program, index, name as usize
+        ))
+    }
+
+    pub unsafe fn glBindBuffer(target: GLenum, buffer: GLuint) {
+        eval(format!(
+            "importObject.env.glBindBuffer({},{})",
+            target, buffer
+        ))
+    }
+
+    pub unsafe fn glBindFramebuffer(target: GLenum, framebuffer: GLuint) {
+        eval(format!(
+            "importObject.env.glBindFramebuffer({},{})",
+            target, framebuffer
+        ))
+    }
+
+    pub unsafe fn glBindRenderbuffer(target: GLenum, renderbuffer: GLuint) {
+        eval(format!(
+            "importObject.env.glBindRenderbuffer({},{})",
+            target, renderbuffer
+        ))
+    }
+
+    pub unsafe fn glBindTexture(target: GLenum, texture: GLuint) {
+        eval(format!(
+            "importObject.env.glBindTexture({},{})",
+            target, texture
+        ))
+    }
+
+    pub unsafe fn glBlendColor(red: GLfloat, green: GLfloat, blue: GLfloat, alpha: GLfloat) {
+        eval(format!(
+            "importObject.env.glBlendColor({},{},{},{})",
+            red, green, blue, alpha
+        ))
+    }
+
+    pub unsafe fn glBlendEquation(mode: GLenum) {
+        eval(format!("importObject.env.glBlendEquation({})", mode))
+    }
+
+    pub unsafe fn glBlendEquationSeparate(modeRGB: GLenum, modeAlpha: GLenum) {
+        eval(format!(
+            "importObject.env.glBlendEquationSeparate({},{})",
+            modeRGB, modeAlpha
+        ))
+    }
+
+    pub unsafe fn glBlendFunc(sfactor: GLenum, dfactor: GLenum) {
+        eval(format!(
+            "importObject.env.glBlendFunc({},{})",
+            sfactor, dfactor
+        ))
+    }
+
+    pub unsafe fn glBlendFuncSeparate(
+        sfactorRGB: GLenum,
+        dfactorRGB: GLenum,
+        sfactorAlpha: GLenum,
+        dfactorAlpha: GLenum,
+    ) {
+        eval(format!(
+            "importObject.env.glBlendFuncSeparate({},{},{},{})",
+            sfactorRGB, dfactorRGB, sfactorAlpha, dfactorAlpha
+        ))
+    }
+
+    pub unsafe fn glBufferData(
+        target: GLenum,
+        size: GLsizeiptr,
+        data: *const ::std::os::raw::c_void,
+        usage: GLenum,
+    ) {
+        eval(format!(
+            "importObject.env.glBufferData({},{},{},{})",
+            target, size, data as usize, usage
+        ))
+    }
+
+    pub unsafe fn glBufferSubData(
+        target: GLenum,
+        offset: GLintptr,
+        size: GLsizeiptr,
+        data: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glBufferSubData({},{},{},{})",
+            target, offset, size, data as usize
+        ))
+    }
+
+    pub unsafe fn glCheckFramebufferStatus(target: GLenum) -> GLenum {
+        eval(format!(
+            "importObject.env.glCheckFramebufferStatus({})",
+            target
+        ))
+    }
+
+    pub unsafe fn glClear(mask: GLbitfield) {
+        eval(format!("importObject.env.glClear({})", mask))
+    }
+
+    pub unsafe fn glClearColor(red: GLfloat, green: GLfloat, blue: GLfloat, alpha: GLfloat) {
+        eval(format!(
+            "importObject.env.glClearColor({},{},{},{})",
+            red, green, blue, alpha
+        ))
+    }
+
+    pub unsafe fn glClearDepthf(d: GLfloat) {
+        eval(format!("importObject.env.glClearDepthf({})", d))
+    }
+
+    pub unsafe fn glClearStencil(s: GLint) {
+        eval(format!("importObject.env.glClearStencil({})", s))
+    }
+
+    pub unsafe fn glColorMask(red: GLboolean, green: GLboolean, blue: GLboolean, alpha: GLboolean) {
+        eval(format!(
+            "importObject.env.glColorMask({},{},{},{})",
+            red, green, blue, alpha
+        ))
+    }
+
+    pub unsafe fn glCompileShader(shader: GLuint) {
+        eval(format!("importObject.env.glCompileShader({})", shader))
+    }
+
+    pub unsafe fn glCompressedTexImage2D(
+        target: GLenum,
+        level: GLint,
+        internalformat: GLenum,
+        width: GLsizei,
+        height: GLsizei,
+        border: GLint,
+        imageSize: GLsizei,
+        data: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glCompressedTexImage2D({},{},{},{},{},{},{},{})",
+            target, level, internalformat, width, height, border, imageSize, data as usize
+        ))
+    }
+
+    pub unsafe fn glCompressedTexSubImage2D(
+        target: GLenum,
+        level: GLint,
+        xoffset: GLint,
+        yoffset: GLint,
+        width: GLsizei,
+        height: GLsizei,
+        format: GLenum,
+        imageSize: GLsizei,
+        data: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glCompressedTexSubImage2D({},{},{},{},{},{},{},{},{})",
+            target, level, xoffset, yoffset, width, height, format, imageSize, data as usize
+        ))
+    }
+
+    pub unsafe fn glCopyTexImage2D(
+        target: GLenum,
+        level: GLint,
+        internalformat: GLenum,
+        x: GLint,
+        y: GLint,
+        width: GLsizei,
+        height: GLsizei,
+        border: GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glCopyTexImage2D({},{},{},{},{},{},{},{})",
+            target, level, internalformat, x, y, width, height, border
+        ))
+    }
+
+    pub unsafe fn glCopyTexSubImage2D(
+        target: GLenum,
+        level: GLint,
+        xoffset: GLint,
+        yoffset: GLint,
+        x: GLint,
+        y: GLint,
+        width: GLsizei,
+        height: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glCopyTexSubImage2D({},{},{},{},{},{},{},{})",
+            target, level, xoffset, yoffset, x, y, width, height
+        ))
+    }
+
+    pub unsafe fn glCreateProgram() -> GLuint {
+        eval("importObject.env.glCreateProgram()")
+    }
+
+    pub unsafe fn glCreateShader(type_: GLenum) -> GLuint {
+        eval(format!("importObject.env.glCreateShader({})", type_))
+    }
+
+    pub unsafe fn glCullFace(mode: GLenum) {
+        eval(format!("importObject.env.glCullFace({})", mode))
+    }
+
+    pub unsafe fn glDeleteBuffers(n: GLsizei, buffers: *const GLuint) {
+        eval(format!(
+            "importObject.env.glDeleteBuffers({},{})",
+            n, buffers as usize
+        ))
+    }
+
+    pub unsafe fn glDeleteFramebuffers(n: GLsizei, framebuffers: *const GLuint) {
+        eval(format!(
+            "importObject.env.glDeleteFramebuffers({},{})",
+            n, framebuffers as usize
+        ))
+    }
+
+    pub unsafe fn glDeleteProgram(program: GLuint) {
+        eval(format!("importObject.env.glDeleteProgram({})", program))
+    }
+
+    pub unsafe fn glDeleteRenderbuffers(n: GLsizei, renderbuffers: *const GLuint) {
+        eval(format!(
+            "importObject.env.glDeleteRenderbuffers({},{})",
+            n, renderbuffers as usize
+        ))
+    }
+
+    pub unsafe fn glDeleteShader(shader: GLuint) {
+        eval(format!("importObject.env.glDeleteShader({})", shader))
+    }
+
+    pub unsafe fn glDeleteTextures(n: GLsizei, textures: *const GLuint) {
+        eval(format!(
+            "importObject.env.glDeleteTextures({},{})",
+            n, textures as usize
+        ))
+    }
+
+    pub unsafe fn glDepthFunc(func: GLenum) {
+        eval(format!("importObject.env.glDepthFunc({})", func))
+    }
+
+    pub unsafe fn glDepthMask(flag: GLboolean) {
+        eval(format!("importObject.env.glDepthMask({})", flag))
+    }
+
+    pub unsafe fn glDepthRangef(n: GLfloat, f: GLfloat) {
+        eval(format!("importObject.env.glDepthRangef({},{})", n, f))
+    }
+
+    pub unsafe fn glDetachShader(program: GLuint, shader: GLuint) {
+        eval(format!(
+            "importObject.env.glDetachShader({},{})",
+            program, shader
+        ))
+    }
+
+    pub unsafe fn glDisable(cap: GLenum) {
+        eval(format!("importObject.env.glDisable({})", cap))
+    }
+
+    pub unsafe fn glDisableVertexAttribArray(index: GLuint) {
+        eval(format!(
+            "importObject.env.glDisableVertexAttribArray({})",
+            index
+        ))
+    }
+
+    pub unsafe fn glDrawArrays(mode: GLenum, first: GLint, count: GLsizei) {
+        eval(format!(
+            "importObject.env.glDrawArrays({},{},{})",
+            mode, first, count
+        ))
+    }
+
+    pub unsafe fn glDrawElements(
+        mode: GLenum,
+        count: GLsizei,
+        type_: GLenum,
+        indices: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glDrawElements({},{},{},{})",
+            mode, count, type_, indices as usize
+        ))
+    }
+
+    pub unsafe fn glEnable(cap: GLenum) {
+        eval(format!("importObject.env.glEnable({})", cap))
+    }
+
+    pub unsafe fn glEnableVertexAttribArray(index: GLuint) {
+        eval(format!(
+            "importObject.env.glEnableVertexAttribArray({})",
+            index
+        ))
+    }
+
+    pub unsafe fn glFinish() {
+        eval("importObject.env.glFinish()")
+    }
+
+    pub unsafe fn glFlush() {
+        eval("importObject.env.glFlush()")
+    }
+
+    pub unsafe fn glFramebufferRenderbuffer(
+        target: GLenum,
+        attachment: GLenum,
+        renderbuffertarget: GLenum,
+        renderbuffer: GLuint,
+    ) {
+        eval(format!(
+            "importObject.env.glFramebufferRenderbuffer({},{},{},{})",
+            target, attachment, renderbuffertarget, renderbuffer
+        ))
+    }
+
+    pub unsafe fn glFramebufferTexture2D(
+        target: GLenum,
+        attachment: GLenum,
+        textarget: GLenum,
+        texture: GLuint,
+        level: GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glFramebufferTexture2D({},{},{},{},{})",
+            target, attachment, textarget, texture, level
+        ))
+    }
+
+    pub unsafe fn glFrontFace(mode: GLenum) {
+        eval(format!("importObject.env.glFrontFace({})", mode))
+    }
+
+    pub unsafe fn glGenBuffers(n: GLsizei, buffers: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGenBuffers({},{})",
+            n, buffers as usize
+        ))
+    }
+
+    pub unsafe fn glGenerateMipmap(target: GLenum) {
+        eval(format!("importObject.env.glGenerateMipmap({})", target))
+    }
+
+    pub unsafe fn glGenFramebuffers(n: GLsizei, framebuffers: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGenFramebuffers({},{})",
+            n, framebuffers as usize
+        ))
+    }
+
+    pub unsafe fn glGenRenderbuffers(n: GLsizei, renderbuffers: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGenRenderbuffers({},{})",
+            n, renderbuffers as usize
+        ))
+    }
+
+    pub unsafe fn glGenTextures(n: GLsizei, textures: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGenTextures({},{})",
+            n, textures as usize
+        ))
+    }
+
+    pub unsafe fn glGetActiveAttrib(
+        program: GLuint,
+        index: GLuint,
+        bufSize: GLsizei,
+        length: *mut GLsizei,
+        size: *mut GLint,
+        type_: *mut GLenum,
+        name: *mut GLchar,
+    ) {
+        eval(format!(
+            "importObject.env.glGetActiveAttrib({},{},{},{},{},{},{})",
+            program, index, bufSize, length as usize, size as usize, type_ as usize, name as usize
+        ))
+    }
+
+    pub unsafe fn glGetActiveUniform(
+        program: GLuint,
+        index: GLuint,
+        bufSize: GLsizei,
+        length: *mut GLsizei,
+        size: *mut GLint,
+        type_: *mut GLenum,
+        name: *mut GLchar,
+    ) {
+        eval(format!(
+            "importObject.env.glGetActiveUniform({},{},{},{},{},{},{})",
+            program, index, bufSize, length as usize, size as usize, type_ as usize, name as usize
+        ))
+    }
+
+    pub unsafe fn glGetAttachedShaders(
+        program: GLuint,
+        maxCount: GLsizei,
+        count: *mut GLsizei,
+        shaders: *mut GLuint,
+    ) {
+        eval(format!(
+            "importObject.env.glGetAttachedShaders({},{},{},{})",
+            program, maxCount, count as usize, shaders as usize
+        ))
+    }
+
+    pub unsafe fn glGetAttribLocation(program: GLuint, name: *const GLchar) -> GLint {
+        eval(format!(
+            "importObject.env.glGetAttribLocation({},{})",
+            program, name as usize
+        ))
+    }
+
+    pub unsafe fn glGetBooleanv(pname: GLenum, data: *mut GLboolean) {
+        eval(format!(
+            "importObject.env.glGetBooleanv({},{})",
+            pname, data as usize
+        ))
+    }
+
+    pub unsafe fn glGetBufferParameteriv(target: GLenum, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetBufferParameteriv({},{},{})",
+            target, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetError() -> GLenum {
+        eval("importObject.env.glGetError()")
+    }
+
+    pub unsafe fn glGetFloatv(pname: GLenum, data: *mut GLfloat) {
+        eval(format!(
+            "importObject.env.glGetFloatv({},{})",
+            pname, data as usize
+        ))
+    }
+
+    pub unsafe fn glGetFramebufferAttachmentParameteriv(
+        target: GLenum,
+        attachment: GLenum,
+        pname: GLenum,
+        params: *mut GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glGetFramebufferAttachmentParameteriv({},{},{},{})",
+            target, attachment, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetIntegerv(pname: GLenum, data: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetIntegerv({},{})",
+            pname, data as usize
+        ))
+    }
+
+    pub unsafe fn glGetProgramiv(program: GLuint, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetProgramiv({},{},{})",
+            program, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetProgramInfoLog(
+        program: GLuint,
+        bufSize: GLsizei,
+        length: *mut GLsizei,
+        infoLog: *mut GLchar,
+    ) {
+        eval(format!(
+            "importObject.env.glGetProgramInfoLog({},{},{},{})",
+            program, bufSize, length as usize, infoLog as usize
+        ))
+    }
+
+    pub unsafe fn glGetRenderbufferParameteriv(target: GLenum, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetRenderbufferParameteriv({},{},{})",
+            target, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetShaderiv(shader: GLuint, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetShaderiv({},{},{})",
+            shader, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetShaderInfoLog(
+        shader: GLuint,
+        bufSize: GLsizei,
+        length: *mut GLsizei,
+        infoLog: *mut GLchar,
+    ) {
+        eval(format!(
+            "importObject.env.glGetShaderInfoLog({},{},{},{})",
+            shader, bufSize, length as usize, infoLog as usize
+        ))
+    }
+
+    pub unsafe fn glGetShaderPrecisionFormat(
+        shadertype: GLenum,
+        precisiontype: GLenum,
+        range: *mut GLint,
+        precision: *mut GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glGetShaderPrecisionFormat({},{},{},{})",
+            shadertype, precisiontype, range as usize, precision as usize
+        ))
+    }
+
+    pub unsafe fn glGetShaderSource(
+        shader: GLuint,
+        bufSize: GLsizei,
+        length: *mut GLsizei,
+        source: *mut GLchar,
+    ) {
+        eval(format!(
+            "importObject.env.glGetShaderSource({},{},{},{})",
+            shader, bufSize, length as usize, source as usize
+        ))
+    }
+
+    pub unsafe fn glGetString(name: GLenum) -> *const GLubyte {
+        eval::<usize, _>(format!("importObject.env.glGetString({})", name)) as _
+    }
+
+    pub unsafe fn glGetTexParameterfv(target: GLenum, pname: GLenum, params: *mut GLfloat) {
+        eval(format!(
+            "importObject.env.glGetTexParameterfv({},{},{})",
+            target, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetTexParameteriv(target: GLenum, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetTexParameteriv({},{},{})",
+            target, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetUniformfv(program: GLuint, location: GLint, params: *mut GLfloat) {
+        eval(format!(
+            "importObject.env.glGetUniformfv({},{},{})",
+            program, location, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetUniformiv(program: GLuint, location: GLint, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetUniformiv({},{},{})",
+            program, location, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetUniformLocation(program: GLuint, name: *const GLchar) -> GLint {
+        eval(format!(
+            "importObject.env.glGetUniformLocation({},{})",
+            program, name as usize
+        ))
+    }
+
+    pub unsafe fn glGetVertexAttribfv(index: GLuint, pname: GLenum, params: *mut GLfloat) {
+        eval(format!(
+            "importObject.env.glGetVertexAttribfv({},{},{})",
+            index, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetVertexAttribiv(index: GLuint, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetVertexAttribiv({},{},{})",
+            index, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetVertexAttribPointerv(
+        index: GLuint,
+        pname: GLenum,
+        pointer: *mut *mut ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glGetVertexAttribPointerv({},{},{})",
+            index, pname, pointer as usize
+        ))
+    }
+
+    pub unsafe fn glHint(target: GLenum, mode: GLenum) {
+        eval(format!("importObject.env.glHint({},{})", target, mode))
+    }
+
+    pub unsafe fn glIsBuffer(buffer: GLuint) -> GLboolean {
+        eval(format!("importObject.env.glIsBuffer({})", buffer))
+    }
+
+    pub unsafe fn glIsEnabled(cap: GLenum) -> GLboolean {
+        eval(format!("importObject.env.glIsEnabled({})", cap))
+    }
+
+    pub unsafe fn glIsFramebuffer(framebuffer: GLuint) -> GLboolean {
+        eval(format!("importObject.env.glIsFramebuffer({})", framebuffer))
+    }
+
+    pub unsafe fn glIsProgram(program: GLuint) -> GLboolean {
+        eval(format!("importObject.env.glIsProgram({})", program))
+    }
+
+    pub unsafe fn glIsRenderbuffer(renderbuffer: GLuint) -> GLboolean {
+        eval(format!(
+            "importObject.env.glIsRenderbuffer({})",
+            renderbuffer
+        ))
+    }
+
+    pub unsafe fn glIsShader(shader: GLuint) -> GLboolean {
+        eval(format!("importObject.env.glIsShader({})", shader))
+    }
+
+    pub unsafe fn glIsTexture(texture: GLuint) -> GLboolean {
+        eval(format!("importObject.env.glIsTexture({})", texture))
+    }
+
+    pub unsafe fn glLineWidth(width: GLfloat) {
+        eval(format!("importObject.env.glLineWidth({})", width))
+    }
+
+    pub unsafe fn glLinkProgram(program: GLuint) {
+        eval(format!("importObject.env.glLinkProgram({})", program))
+    }
+
+    pub unsafe fn glPixelStorei(pname: GLenum, param: GLint) {
+        eval(format!(
+            "importObject.env.glPixelStorei({},{})",
+            pname, param
+        ))
+    }
+
+    pub unsafe fn glPolygonOffset(factor: GLfloat, units: GLfloat) {
+        eval(format!(
+            "importObject.env.glPolygonOffset({},{})",
+            factor, units
+        ))
+    }
+
+    pub unsafe fn glReadPixels(
+        x: GLint,
+        y: GLint,
+        width: GLsizei,
+        height: GLsizei,
+        format: GLenum,
+        type_: GLenum,
+        pixels: *mut ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glReadPixels({},{},{},{},{},{},{})",
+            x, y, width, height, format, type_, pixels as usize
+        ))
+    }
+
+    pub unsafe fn glReleaseShaderCompiler() {
+        eval("importObject.env.glReleaseShaderCompiler()")
+    }
+
+    pub unsafe fn glRenderbufferStorage(
+        target: GLenum,
+        internalformat: GLenum,
+        width: GLsizei,
+        height: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glRenderbufferStorage({},{},{},{})",
+            target, internalformat, width, height
+        ))
+    }
+
+    pub unsafe fn glSampleCoverage(value: GLfloat, invert: GLboolean) {
+        eval(format!(
+            "importObject.env.glSampleCoverage({},{})",
+            value, invert
+        ))
+    }
+
+    pub unsafe fn glScissor(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
+        eval(format!(
+            "importObject.env.glScissor({},{},{},{})",
+            x, y, width, height
+        ))
+    }
+
+    pub unsafe fn glShaderBinary(
+        count: GLsizei,
+        shaders: *const GLuint,
+        binaryformat: GLenum,
+        binary: *const ::std::os::raw::c_void,
+        length: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glShaderBinary({},{},{},{},{})",
+            count, shaders as usize, binaryformat, binary as usize, length
+        ))
+    }
+
+    pub unsafe fn glShaderSource(
+        shader: GLuint,
+        count: GLsizei,
+        string: *const *const GLchar,
+        length: *const GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glShaderSource({},{},{},{})",
+            shader, count, string as usize, length as usize
+        ))
+    }
+
+    pub unsafe fn glStencilFunc(func: GLenum, ref_: GLint, mask: GLuint) {
+        eval(format!(
+            "importObject.env.glStencilFunc({},{},{})",
+            func, ref_, mask
+        ))
+    }
+
+    pub unsafe fn glStencilFuncSeparate(face: GLenum, func: GLenum, ref_: GLint, mask: GLuint) {
+        eval(format!(
+            "importObject.env.glStencilFuncSeparate({},{},{},{})",
+            face, func, ref_, mask
+        ))
+    }
+
+    pub unsafe fn glStencilMask(mask: GLuint) {
+        eval(format!("importObject.env.glStencilMask({})", mask))
+    }
+
+    pub unsafe fn glStencilMaskSeparate(face: GLenum, mask: GLuint) {
+        eval(format!(
+            "importObject.env.glStencilMaskSeparate({},{})",
+            face, mask
+        ))
+    }
+
+    pub unsafe fn glStencilOp(fail: GLenum, zfail: GLenum, zpass: GLenum) {
+        eval(format!(
+            "importObject.env.glStencilOp({},{},{})",
+            fail, zfail, zpass
+        ))
+    }
+
+    pub unsafe fn glStencilOpSeparate(face: GLenum, sfail: GLenum, dpfail: GLenum, dppass: GLenum) {
+        eval(format!(
+            "importObject.env.glStencilOpSeparate({},{},{},{})",
+            face, sfail, dpfail, dppass
+        ))
+    }
+
+    pub unsafe fn glTexImage2D(
+        target: GLenum,
+        level: GLint,
+        internalformat: GLint,
+        width: GLsizei,
+        height: GLsizei,
+        border: GLint,
+        format: GLenum,
+        type_: GLenum,
+        pixels: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glTexImage2D({},{},{},{},{},{},{},{},{})",
+            target, level, internalformat, width, height, border, format, type_, pixels as usize
+        ))
+    }
+
+    pub unsafe fn glTexParameterf(target: GLenum, pname: GLenum, param: GLfloat) {
+        eval(format!(
+            "importObject.env.glTexParameterf({},{},{})",
+            target, pname, param
+        ))
+    }
+
+    pub unsafe fn glTexParameterfv(target: GLenum, pname: GLenum, params: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glTexParameterfv({},{},{})",
+            target, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glTexParameteri(target: GLenum, pname: GLenum, param: GLint) {
+        eval(format!(
+            "importObject.env.glTexParameteri({},{},{})",
+            target, pname, param
+        ))
+    }
+
+    pub unsafe fn glTexParameteriv(target: GLenum, pname: GLenum, params: *const GLint) {
+        eval(format!(
+            "importObject.env.glTexParameteriv({},{},{})",
+            target, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glTexSubImage2D(
+        target: GLenum,
+        level: GLint,
+        xoffset: GLint,
+        yoffset: GLint,
+        width: GLsizei,
+        height: GLsizei,
+        format: GLenum,
+        type_: GLenum,
+        pixels: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glTexSubImage2D({},{},{},{},{},{},{},{},{})",
+            target, level, xoffset, yoffset, width, height, format, type_, pixels as usize
+        ))
+    }
+
+    pub unsafe fn glUniform1f(location: GLint, v0: GLfloat) {
+        eval(format!("importObject.env.glUniform1f({},{})", location, v0))
+    }
+
+    pub unsafe fn glUniform1fv(location: GLint, count: GLsizei, value: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glUniform1fv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform1i(location: GLint, v0: GLint) {
+        eval(format!("importObject.env.glUniform1i({},{})", location, v0))
+    }
+
+    pub unsafe fn glUniform1iv(location: GLint, count: GLsizei, value: *const GLint) {
+        eval(format!(
+            "importObject.env.glUniform1iv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform2f(location: GLint, v0: GLfloat, v1: GLfloat) {
+        eval(format!(
+            "importObject.env.glUniform2f({},{},{})",
+            location, v0, v1
+        ))
+    }
+
+    pub unsafe fn glUniform2fv(location: GLint, count: GLsizei, value: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glUniform2fv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform2i(location: GLint, v0: GLint, v1: GLint) {
+        eval(format!(
+            "importObject.env.glUniform2i({},{},{})",
+            location, v0, v1
+        ))
+    }
+
+    pub unsafe fn glUniform2iv(location: GLint, count: GLsizei, value: *const GLint) {
+        eval(format!(
+            "importObject.env.glUniform2iv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform3f(location: GLint, v0: GLfloat, v1: GLfloat, v2: GLfloat) {
+        eval(format!(
+            "importObject.env.glUniform3f({},{},{},{})",
+            location, v0, v1, v2
+        ))
+    }
+
+    pub unsafe fn glUniform3fv(location: GLint, count: GLsizei, value: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glUniform3fv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform3i(location: GLint, v0: GLint, v1: GLint, v2: GLint) {
+        eval(format!(
+            "importObject.env.glUniform3i({},{},{},{})",
+            location, v0, v1, v2
+        ))
+    }
+
+    pub unsafe fn glUniform3iv(location: GLint, count: GLsizei, value: *const GLint) {
+        eval(format!(
+            "importObject.env.glUniform3iv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform4f(location: GLint, v0: GLfloat, v1: GLfloat, v2: GLfloat, v3: GLfloat) {
+        eval(format!(
+            "importObject.env.glUniform4f({},{},{},{},{})",
+            location, v0, v1, v2, v3
+        ))
+    }
+
+    pub unsafe fn glUniform4fv(location: GLint, count: GLsizei, value: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glUniform4fv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform4i(location: GLint, v0: GLint, v1: GLint, v2: GLint, v3: GLint) {
+        eval(format!(
+            "importObject.env.glUniform4i({},{},{},{},{})",
+            location, v0, v1, v2, v3
+        ))
+    }
+
+    pub unsafe fn glUniform4iv(location: GLint, count: GLsizei, value: *const GLint) {
+        eval(format!(
+            "importObject.env.glUniform4iv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniformMatrix2fv(
+        location: GLint,
+        count: GLsizei,
+        transpose: GLboolean,
+        value: *const GLfloat,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformMatrix2fv({},{},{},{})",
+            location, count, transpose, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniformMatrix3fv(
+        location: GLint,
+        count: GLsizei,
+        transpose: GLboolean,
+        value: *const GLfloat,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformMatrix3fv({},{},{},{})",
+            location, count, transpose, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniformMatrix4fv(
+        location: GLint,
+        count: GLsizei,
+        transpose: GLboolean,
+        value: *const GLfloat,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformMatrix4fv({},{},{},{})",
+            location, count, transpose, value as usize
+        ))
+    }
+
+    pub unsafe fn glUseProgram(program: GLuint) {
+        eval(format!("importObject.env.glUseProgram({})", program))
+    }
+
+    pub unsafe fn glValidateProgram(program: GLuint) {
+        eval(format!("importObject.env.glValidateProgram({})", program))
+    }
+
+    pub unsafe fn glVertexAttrib1f(index: GLuint, x: GLfloat) {
+        eval(format!(
+            "importObject.env.glVertexAttrib1f({},{})",
+            index, x
+        ))
+    }
+
+    pub unsafe fn glVertexAttrib1fv(index: GLuint, v: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glVertexAttrib1fv({},{})",
+            index, v as usize
+        ))
+    }
+
+    pub unsafe fn glVertexAttrib2f(index: GLuint, x: GLfloat, y: GLfloat) {
+        eval(format!(
+            "importObject.env.glVertexAttrib2f({},{},{})",
+            index, x, y
+        ))
+    }
+
+    pub unsafe fn glVertexAttrib2fv(index: GLuint, v: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glVertexAttrib2fv({},{})",
+            index, v as usize
+        ))
+    }
+
+    pub unsafe fn glVertexAttrib3f(index: GLuint, x: GLfloat, y: GLfloat, z: GLfloat) {
+        eval(format!(
+            "importObject.env.glVertexAttrib3f({},{},{},{})",
+            index, x, y, z
+        ))
+    }
+
+    pub unsafe fn glVertexAttrib3fv(index: GLuint, v: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glVertexAttrib3fv({},{})",
+            index, v as usize
+        ))
+    }
+
+    pub unsafe fn glVertexAttrib4f(index: GLuint, x: GLfloat, y: GLfloat, z: GLfloat, w: GLfloat) {
+        eval(format!(
+            "importObject.env.glVertexAttrib4f({},{},{},{},{})",
+            index, x, y, z, w
+        ))
+    }
+
+    pub unsafe fn glVertexAttrib4fv(index: GLuint, v: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glVertexAttrib4fv({},{})",
+            index, v as usize
+        ))
+    }
+
+    pub unsafe fn glVertexAttribPointer(
+        index: GLuint,
+        size: GLint,
+        type_: GLenum,
+        normalized: GLboolean,
+        stride: GLsizei,
+        pointer: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glVertexAttribPointer({},{},{},{},{},{})",
+            index, size, type_, normalized, stride, pointer as usize
+        ))
+    }
+
+    pub unsafe fn glVertexAttribIPointer(
+        index: GLuint,
+        size: GLint,
+        type_: GLenum,
+        stride: GLsizei,
+        pointer: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glVertexAttribIPointer({},{},{},{},{})",
+            index, size, type_, stride, pointer as usize
+        ))
+    }
+
+    pub unsafe fn glViewport(x: GLint, y: GLint, width: GLsizei, height: GLsizei) {
+        eval(format!(
+            "importObject.env.glViewport({},{},{},{})",
+            x, y, width, height
+        ))
+    }
+
+    pub unsafe fn glReadBuffer(src: GLenum) {
+        eval(format!("importObject.env.glReadBuffer({})", src))
+    }
+
+    pub unsafe fn glDrawRangeElements(
+        mode: GLenum,
+        start: GLuint,
+        end: GLuint,
+        count: GLsizei,
+        type_: GLenum,
+        indices: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glDrawRangeElements({},{},{},{},{},{})",
+            mode, start, end, count, type_, indices as usize
+        ))
+    }
+
+    pub unsafe fn glTexImage3D(
+        target: GLenum,
+        level: GLint,
+        internalformat: GLint,
+        width: GLsizei,
+        height: GLsizei,
+        depth: GLsizei,
+        border: GLint,
+        format: GLenum,
+        type_: GLenum,
+        pixels: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glTexImage3D({},{},{},{},{},{},{},{},{},{})",
+            target,
+            level,
+            internalformat,
+            width,
+            height,
+            depth,
+            border,
+            format,
+            type_,
+            pixels as usize
+        ))
+    }
+
+    pub unsafe fn glTexSubImage3D(
+        target: GLenum,
+        level: GLint,
+        xoffset: GLint,
+        yoffset: GLint,
+        zoffset: GLint,
+        width: GLsizei,
+        height: GLsizei,
+        depth: GLsizei,
+        format: GLenum,
+        type_: GLenum,
+        pixels: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glTexSubImage3D({},{},{},{},{},{},{},{},{},{},{})",
+            target,
+            level,
+            xoffset,
+            yoffset,
+            zoffset,
+            width,
+            height,
+            depth,
+            format,
+            type_,
+            pixels as usize
+        ))
+    }
+
+    pub unsafe fn glCopyTexSubImage3D(
+        target: GLenum,
+        level: GLint,
+        xoffset: GLint,
+        yoffset: GLint,
+        zoffset: GLint,
+        x: GLint,
+        y: GLint,
+        width: GLsizei,
+        height: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glCopyTexSubImage3D({},{},{},{},{},{},{},{},{})",
+            target, level, xoffset, yoffset, zoffset, x, y, width, height
+        ))
+    }
+
+    pub unsafe fn glCompressedTexImage3D(
+        target: GLenum,
+        level: GLint,
+        internalformat: GLenum,
+        width: GLsizei,
+        height: GLsizei,
+        depth: GLsizei,
+        border: GLint,
+        imageSize: GLsizei,
+        data: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glCompressedTexImage3D({},{},{},{},{},{},{},{},{})",
+            target, level, internalformat, width, height, depth, border, imageSize, data as usize
+        ))
+    }
+
+    pub unsafe fn glCompressedTexSubImage3D(
+        target: GLenum,
+        level: GLint,
+        xoffset: GLint,
+        yoffset: GLint,
+        zoffset: GLint,
+        width: GLsizei,
+        height: GLsizei,
+        depth: GLsizei,
+        format: GLenum,
+        imageSize: GLsizei,
+        data: *const ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glCompressedTexSubImage3D({},{},{},{},{},{},{},{},{},{},{})",
+            target,
+            level,
+            xoffset,
+            yoffset,
+            zoffset,
+            width,
+            height,
+            depth,
+            format,
+            imageSize,
+            data as usize
+        ))
+    }
+
+    pub unsafe fn glGenQueries(n: GLsizei, ids: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGenQueries({},{})",
+            n, ids as usize
+        ))
+    }
+
+    pub unsafe fn glDeleteQueries(n: GLsizei, ids: *const GLuint) {
+        eval(format!(
+            "importObject.env.glDeleteQueries({},{})",
+            n, ids as usize
+        ))
+    }
+
+    pub unsafe fn glIsQuery(id: GLuint) -> GLboolean {
+        eval(format!("importObject.env.glIsQuery({})", id))
+    }
+
+    pub unsafe fn glBeginQuery(target: GLenum, id: GLuint) {
+        eval(format!("importObject.env.glBeginQuery({},{})", target, id))
+    }
+
+    pub unsafe fn glEndQuery(target: GLenum) {
+        eval(format!("importObject.env.glEndQuery({})", target))
+    }
+
+    pub unsafe fn glGetQueryiv(target: GLenum, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetQueryiv({},{},{})",
+            target, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glQueryCounter(id: GLenum, pname: GLenum) {
+        eval(format!("importObject.env.glQueryCounter({},{})", id, pname))
+    }
+
+    pub unsafe fn glGetQueryObjectiv(id: GLuint, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetQueryObjectiv({},{},{})",
+            id, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetQueryObjectui64v(id: GLuint, pname: GLenum, params: *mut GLuint64) {
+        eval(format!(
+            "importObject.env.glGetQueryObjectui64v({},{},{})",
+            id, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glUnmapBuffer(target: GLenum) -> GLboolean {
+        eval(format!("importObject.env.glUnmapBuffer({})", target))
+    }
+
+    pub unsafe fn glGetBufferPointerv(
+        target: GLenum,
+        pname: GLenum,
+        params: *mut *mut ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glGetBufferPointerv({},{},{})",
+            target, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glDrawBuffers(n: GLsizei, bufs: *const GLenum) {
+        eval(format!(
+            "importObject.env.glDrawBuffers({},{})",
+            n, bufs as usize
+        ))
+    }
+
+    pub unsafe fn glUniformMatrix2x3fv(
+        location: GLint,
+        count: GLsizei,
+        transpose: GLboolean,
+        value: *const GLfloat,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformMatrix2x3fv({},{},{},{})",
+            location, count, transpose, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniformMatrix3x2fv(
+        location: GLint,
+        count: GLsizei,
+        transpose: GLboolean,
+        value: *const GLfloat,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformMatrix3x2fv({},{},{},{})",
+            location, count, transpose, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniformMatrix2x4fv(
+        location: GLint,
+        count: GLsizei,
+        transpose: GLboolean,
+        value: *const GLfloat,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformMatrix2x4fv({},{},{},{})",
+            location, count, transpose, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniformMatrix4x2fv(
+        location: GLint,
+        count: GLsizei,
+        transpose: GLboolean,
+        value: *const GLfloat,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformMatrix4x2fv({},{},{},{})",
+            location, count, transpose, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniformMatrix3x4fv(
+        location: GLint,
+        count: GLsizei,
+        transpose: GLboolean,
+        value: *const GLfloat,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformMatrix3x4fv({},{},{},{})",
+            location, count, transpose, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniformMatrix4x3fv(
+        location: GLint,
+        count: GLsizei,
+        transpose: GLboolean,
+        value: *const GLfloat,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformMatrix4x3fv({},{},{},{})",
+            location, count, transpose, value as usize
+        ))
+    }
+
+    pub unsafe fn glBlitFramebuffer(
+        srcX0: GLint,
+        srcY0: GLint,
+        srcX1: GLint,
+        srcY1: GLint,
+        dstX0: GLint,
+        dstY0: GLint,
+        dstX1: GLint,
+        dstY1: GLint,
+        mask: GLbitfield,
+        filter: GLenum,
+    ) {
+        eval(format!(
+            "importObject.env.glBlitFramebuffer({},{},{},{},{},{},{},{},{},{})",
+            srcX0, srcY0, srcX1, srcY1, dstX0, dstY0, dstX1, dstY1, mask, filter
+        ))
+    }
+
+    pub unsafe fn glRenderbufferStorageMultisample(
+        target: GLenum,
+        samples: GLsizei,
+        internalformat: GLenum,
+        width: GLsizei,
+        height: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glRenderbufferStorageMultisample({},{},{},{},{})",
+            target, samples, internalformat, width, height
+        ))
+    }
+
+    pub unsafe fn glFramebufferTextureLayer(
+        target: GLenum,
+        attachment: GLenum,
+        texture: GLuint,
+        level: GLint,
+        layer: GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glFramebufferTextureLayer({},{},{},{},{})",
+            target, attachment, texture, level, layer
+        ))
+    }
+
+    pub unsafe fn glMapBufferRange(
+        target: GLenum,
+        offset: GLintptr,
+        length: GLsizeiptr,
+        access: GLbitfield,
+    ) -> *mut ::std::os::raw::c_void {
+        eval::<usize, _>(format!(
+            "importObject.env.glMapBufferRange({},{},{},{})",
+            target, offset, length, access
+        )) as _
+    }
+
+    pub unsafe fn glFlushMappedBufferRange(target: GLenum, offset: GLintptr, length: GLsizeiptr) {
+        eval(format!(
+            "importObject.env.glFlushMappedBufferRange({},{},{})",
+            target, offset, length
+        ))
+    }
+
+    pub unsafe fn glBindVertexArray(array: GLuint) {
+        eval(format!("importObject.env.glBindVertexArray({})", array))
+    }
+
+    pub unsafe fn glDeleteVertexArrays(n: GLsizei, arrays: *const GLuint) {
+        eval(format!(
+            "importObject.env.glDeleteVertexArrays({},{})",
+            n, arrays as usize
+        ))
+    }
+
+    pub unsafe fn glGenVertexArrays(n: GLsizei, arrays: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGenVertexArrays({},{})",
+            n, arrays as usize
+        ))
+    }
+
+    pub unsafe fn glIsVertexArray(array: GLuint) -> GLboolean {
+        eval(format!("importObject.env.glIsVertexArray({})", array))
+    }
+
+    pub unsafe fn glGetIntegeri_v(target: GLenum, index: GLuint, data: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetIntegeri_v({},{},{})",
+            target, index, data as usize
+        ))
+    }
+
+    pub unsafe fn glBeginTransformFeedback(primitiveMode: GLenum) {
+        eval(format!(
+            "importObject.env.glBeginTransformFeedback({})",
+            primitiveMode
+        ))
+    }
+
+    pub unsafe fn glEndTransformFeedback() {
+        eval("importObject.env.glEndTransformFeedback()")
+    }
+
+    pub unsafe fn glBindBufferRange(
+        target: GLenum,
+        index: GLuint,
+        buffer: GLuint,
+        offset: GLintptr,
+        size: GLsizeiptr,
+    ) {
+        eval(format!(
+            "importObject.env.glBindBufferRange({},{},{},{},{})",
+            target, index, buffer, offset, size
+        ))
+    }
+
+    pub unsafe fn glBindBufferBase(target: GLenum, index: GLuint, buffer: GLuint) {
+        eval(format!(
+            "importObject.env.glBindBufferBase({},{},{})",
+            target, index, buffer
+        ))
+    }
+
+    pub unsafe fn glTransformFeedbackVaryings(
+        program: GLuint,
+        count: GLsizei,
+        varyings: *const *const GLchar,
+        bufferMode: GLenum,
+    ) {
+        eval(format!(
+            "importObject.env.glTransformFeedbackVaryings({},{},{},{})",
+            program, count, varyings as usize, bufferMode
+        ))
+    }
+
+    pub unsafe fn glGetTransformFeedbackVarying(
+        program: GLuint,
+        index: GLuint,
+        bufSize: GLsizei,
+        length: *mut GLsizei,
+        size: *mut GLsizei,
+        type_: *mut GLenum,
+        name: *mut GLchar,
+    ) {
+        eval(format!(
+            "importObject.env.glGetTransformFeedbackVarying({},{},{},{},{},{},{})",
+            program, index, bufSize, length as usize, size as usize, type_ as usize, name as usize
+        ))
+    }
+
+    pub unsafe fn glGetVertexAttribIiv(index: GLuint, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetVertexAttribIiv({},{},{})",
+            index, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetVertexAttribIuiv(index: GLuint, pname: GLenum, params: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGetVertexAttribIuiv({},{},{})",
+            index, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glVertexAttribI4i(index: GLuint, x: GLint, y: GLint, z: GLint, w: GLint) {
+        eval(format!(
+            "importObject.env.glVertexAttribI4i({},{},{},{},{})",
+            index, x, y, z, w
+        ))
+    }
+
+    pub unsafe fn glVertexAttribI4ui(index: GLuint, x: GLuint, y: GLuint, z: GLuint, w: GLuint) {
+        eval(format!(
+            "importObject.env.glVertexAttribI4ui({},{},{},{},{})",
+            index, x, y, z, w
+        ))
+    }
+
+    pub unsafe fn glVertexAttribI4iv(index: GLuint, v: *const GLint) {
+        eval(format!(
+            "importObject.env.glVertexAttribI4iv({},{})",
+            index, v as usize
+        ))
+    }
+
+    pub unsafe fn glVertexAttribI4uiv(index: GLuint, v: *const GLuint) {
+        eval(format!(
+            "importObject.env.glVertexAttribI4uiv({},{})",
+            index, v as usize
+        ))
+    }
+
+    pub unsafe fn glGetUniformuiv(program: GLuint, location: GLint, params: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGetUniformuiv({},{},{})",
+            program, location, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetFragDataLocation(program: GLuint, name: *const GLchar) -> GLint {
+        eval(format!(
+            "importObject.env.glGetFragDataLocation({},{})",
+            program, name as usize
+        ))
+    }
+
+    pub unsafe fn glUniform1ui(location: GLint, v0: GLuint) {
+        eval(format!(
+            "importObject.env.glUniform1ui({},{})",
+            location, v0
+        ))
+    }
+
+    pub unsafe fn glUniform2ui(location: GLint, v0: GLuint, v1: GLuint) {
+        eval(format!(
+            "importObject.env.glUniform2ui({},{},{})",
+            location, v0, v1
+        ))
+    }
+
+    pub unsafe fn glUniform3ui(location: GLint, v0: GLuint, v1: GLuint, v2: GLuint) {
+        eval(format!(
+            "importObject.env.glUniform3ui({},{},{},{})",
+            location, v0, v1, v2
+        ))
+    }
+
+    pub unsafe fn glUniform4ui(location: GLint, v0: GLuint, v1: GLuint, v2: GLuint, v3: GLuint) {
+        eval(format!(
+            "importObject.env.glUniform4ui({},{},{},{},{})",
+            location, v0, v1, v2, v3
+        ))
+    }
+
+    pub unsafe fn glUniform1uiv(location: GLint, count: GLsizei, value: *const GLuint) {
+        eval(format!(
+            "importObject.env.glUniform1uiv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform2uiv(location: GLint, count: GLsizei, value: *const GLuint) {
+        eval(format!(
+            "importObject.env.glUniform2uiv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform3uiv(location: GLint, count: GLsizei, value: *const GLuint) {
+        eval(format!(
+            "importObject.env.glUniform3uiv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glUniform4uiv(location: GLint, count: GLsizei, value: *const GLuint) {
+        eval(format!(
+            "importObject.env.glUniform4uiv({},{},{})",
+            location, count, value as usize
+        ))
+    }
+
+    pub unsafe fn glClearBufferiv(buffer: GLenum, drawbuffer: GLint, value: *const GLint) {
+        eval(format!(
+            "importObject.env.glClearBufferiv({},{},{})",
+            buffer, drawbuffer, value as usize
+        ))
+    }
+
+    pub unsafe fn glClearBufferuiv(buffer: GLenum, drawbuffer: GLint, value: *const GLuint) {
+        eval(format!(
+            "importObject.env.glClearBufferuiv({},{},{})",
+            buffer, drawbuffer, value as usize
+        ))
+    }
+
+    pub unsafe fn glClearBufferfv(buffer: GLenum, drawbuffer: GLint, value: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glClearBufferfv({},{},{})",
+            buffer, drawbuffer, value as usize
+        ))
+    }
+
+    pub unsafe fn glClearBufferfi(
+        buffer: GLenum,
+        drawbuffer: GLint,
+        depth: GLfloat,
+        stencil: GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glClearBufferfi({},{},{},{})",
+            buffer, drawbuffer, depth, stencil
+        ))
+    }
+
+    pub unsafe fn glGetStringi(name: GLenum, index: GLuint) -> *const GLubyte {
+        eval::<usize, _>(format!("importObject.env.glGetStringi({},{})", name, index)) as _
+    }
+
+    pub unsafe fn glCopyBufferSubData(
+        readTarget: GLenum,
+        writeTarget: GLenum,
+        readOffset: GLintptr,
+        writeOffset: GLintptr,
+        size: GLsizeiptr,
+    ) {
+        eval(format!(
+            "importObject.env.glCopyBufferSubData({},{},{},{},{})",
+            readTarget, writeTarget, readOffset, writeOffset, size
+        ))
+    }
+
+    pub unsafe fn glGetUniformIndices(
+        program: GLuint,
+        uniformCount: GLsizei,
+        uniformNames: *const *const GLchar,
+        uniformIndices: *mut GLuint,
+    ) {
+        eval(format!(
+            "importObject.env.glGetUniformIndices({},{},{},{})",
+            program, uniformCount, uniformNames as usize, uniformIndices as usize
+        ))
+    }
+
+    pub unsafe fn glGetActiveUniformsiv(
+        program: GLuint,
+        uniformCount: GLsizei,
+        uniformIndices: *const GLuint,
+        pname: GLenum,
+        params: *mut GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glGetActiveUniformsiv({},{},{},{},{})",
+            program, uniformCount, uniformIndices as usize, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetUniformBlockIndex(
+        program: GLuint,
+        uniformBlockName: *const GLchar,
+    ) -> GLuint {
+        eval(format!(
+            "importObject.env.glGetUniformBlockIndex({},{})",
+            program, uniformBlockName as usize
+        ))
+    }
+
+    pub unsafe fn glGetActiveUniformBlockiv(
+        program: GLuint,
+        uniformBlockIndex: GLuint,
+        pname: GLenum,
+        params: *mut GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glGetActiveUniformBlockiv({},{},{},{})",
+            program, uniformBlockIndex, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetActiveUniformBlockName(
+        program: GLuint,
+        uniformBlockIndex: GLuint,
+        bufSize: GLsizei,
+        length: *mut GLsizei,
+        uniformBlockName: *mut GLchar,
+    ) {
+        eval(format!(
+            "importObject.env.glGetActiveUniformBlockName({},{},{},{},{})",
+            program, uniformBlockIndex, bufSize, length as usize, uniformBlockName as usize
+        ))
+    }
+
+    pub unsafe fn glUniformBlockBinding(
+        program: GLuint,
+        uniformBlockIndex: GLuint,
+        uniformBlockBinding: GLuint,
+    ) {
+        eval(format!(
+            "importObject.env.glUniformBlockBinding({},{},{})",
+            program, uniformBlockIndex, uniformBlockBinding
+        ))
+    }
+
+    pub unsafe fn glDrawArraysInstanced(
+        mode: GLenum,
+        first: GLint,
+        count: GLsizei,
+        instancecount: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glDrawArraysInstanced({},{},{},{})",
+            mode, first, count, instancecount
+        ))
+    }
+
+    pub unsafe fn glDrawElementsInstanced(
+        mode: GLenum,
+        count: GLsizei,
+        type_: GLenum,
+        indices: *const ::std::os::raw::c_void,
+        instancecount: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glDrawElementsInstanced({},{},{},{},{})",
+            mode, count, type_, indices as usize, instancecount
+        ))
+    }
+
+    pub unsafe fn glFenceSync(condition: GLenum, flags: GLbitfield) -> GLsync {
+        eval::<usize, _>(format!(
+            "importObject.env.glFenceSync({},{})",
+            condition, flags
+        )) as _
+    }
+
+    pub unsafe fn glIsSync(sync: GLsync) -> GLboolean {
+        eval(format!("importObject.env.glIsSync({})", sync as usize))
+    }
+
+    pub unsafe fn glDeleteSync(sync: GLsync) {
+        eval(format!("importObject.env.glDeleteSync({})", sync as usize))
+    }
+
+    pub unsafe fn glClientWaitSync(sync: GLsync, flags: GLbitfield, timeout: GLuint64) -> GLenum {
+        eval(format!(
+            "importObject.env.glClientWaitSync({},{},{})",
+            sync as usize, flags, timeout
+        ))
+    }
+
+    pub unsafe fn glWaitSync(sync: GLsync, flags: GLbitfield, timeout: GLuint64) {
+        eval(format!(
+            "importObject.env.glWaitSync({},{},{})",
+            sync as usize, flags, timeout
+        ))
+    }
+
+    pub unsafe fn glGetInteger64v(pname: GLenum, data: *mut GLint64) {
+        eval(format!(
+            "importObject.env.glGetInteger64v({},{})",
+            pname, data as usize
+        ))
+    }
+
+    pub unsafe fn glGetSynciv(
+        sync: GLsync,
+        pname: GLenum,
+        bufSize: GLsizei,
+        length: *mut GLsizei,
+        values: *mut GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glGetSynciv({},{},{},{},{})",
+            sync as usize, pname, bufSize, length as usize, values as usize
+        ))
+    }
+
+    pub unsafe fn glGetInteger64i_v(target: GLenum, index: GLuint, data: *mut GLint64) {
+        eval(format!(
+            "importObject.env.glGetInteger64i_v({},{},{})",
+            target, index, data as usize
+        ))
+    }
+
+    pub unsafe fn glGetBufferParameteri64v(target: GLenum, pname: GLenum, params: *mut GLint64) {
+        eval(format!(
+            "importObject.env.glGetBufferParameteri64v({},{},{})",
+            target, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGenSamplers(count: GLsizei, samplers: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGenSamplers({},{})",
+            count, samplers as usize
+        ))
+    }
+
+    pub unsafe fn glDeleteSamplers(count: GLsizei, samplers: *const GLuint) {
+        eval(format!(
+            "importObject.env.glDeleteSamplers({},{})",
+            count, samplers as usize
+        ))
+    }
+
+    pub unsafe fn glIsSampler(sampler: GLuint) -> GLboolean {
+        eval(format!("importObject.env.glIsSampler({})", sampler))
+    }
+
+    pub unsafe fn glBindSampler(unit: GLuint, sampler: GLuint) {
+        eval(format!(
+            "importObject.env.glBindSampler({},{})",
+            unit, sampler
+        ))
+    }
+
+    pub unsafe fn glSamplerParameteri(sampler: GLuint, pname: GLenum, param: GLint) {
+        eval(format!(
+            "importObject.env.glSamplerParameteri({},{},{})",
+            sampler, pname, param
+        ))
+    }
+
+    pub unsafe fn glSamplerParameteriv(sampler: GLuint, pname: GLenum, param: *const GLint) {
+        eval(format!(
+            "importObject.env.glSamplerParameteriv({},{},{})",
+            sampler, pname, param as usize
+        ))
+    }
+
+    pub unsafe fn glSamplerParameterf(sampler: GLuint, pname: GLenum, param: GLfloat) {
+        eval(format!(
+            "importObject.env.glSamplerParameterf({},{},{})",
+            sampler, pname, param
+        ))
+    }
+
+    pub unsafe fn glSamplerParameterfv(sampler: GLuint, pname: GLenum, param: *const GLfloat) {
+        eval(format!(
+            "importObject.env.glSamplerParameterfv({},{},{})",
+            sampler, pname, param as usize
+        ))
+    }
+
+    pub unsafe fn glGetSamplerParameteriv(sampler: GLuint, pname: GLenum, params: *mut GLint) {
+        eval(format!(
+            "importObject.env.glGetSamplerParameteriv({},{},{})",
+            sampler, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glGetSamplerParameterfv(sampler: GLuint, pname: GLenum, params: *mut GLfloat) {
+        eval(format!(
+            "importObject.env.glGetSamplerParameterfv({},{},{})",
+            sampler, pname, params as usize
+        ))
+    }
+
+    pub unsafe fn glVertexAttribDivisor(index: GLuint, divisor: GLuint) {
+        eval(format!(
+            "importObject.env.glVertexAttribDivisor({},{})",
+            index, divisor
+        ))
+    }
+
+    pub unsafe fn glBindTransformFeedback(target: GLenum, id: GLuint) {
+        eval(format!(
+            "importObject.env.glBindTransformFeedback({},{})",
+            target, id
+        ))
+    }
+
+    pub unsafe fn glDeleteTransformFeedbacks(n: GLsizei, ids: *const GLuint) {
+        eval(format!(
+            "importObject.env.glDeleteTransformFeedbacks({},{})",
+            n, ids as usize
+        ))
+    }
+
+    pub unsafe fn glGenTransformFeedbacks(n: GLsizei, ids: *mut GLuint) {
+        eval(format!(
+            "importObject.env.glGenTransformFeedbacks({},{})",
+            n, ids as usize
+        ))
+    }
+
+    pub unsafe fn glIsTransformFeedback(id: GLuint) -> GLboolean {
+        eval(format!("importObject.env.glIsTransformFeedback({})", id))
+    }
+
+    pub unsafe fn glPauseTransformFeedback() {
+        eval("importObject.env.glPauseTransformFeedback()")
+    }
+
+    pub unsafe fn glResumeTransformFeedback() {
+        eval("importObject.env.glResumeTransformFeedback()")
+    }
+
+    pub unsafe fn glGetProgramBinary(
+        program: GLuint,
+        bufSize: GLsizei,
+        length: *mut GLsizei,
+        binaryFormat: *mut GLenum,
+        binary: *mut ::std::os::raw::c_void,
+    ) {
+        eval(format!(
+            "importObject.env.glGetProgramBinary({},{},{},{},{})",
+            program, bufSize, length as usize, binaryFormat as usize, binary as usize
+        ))
+    }
+
+    pub unsafe fn glProgramBinary(
+        program: GLuint,
+        binaryFormat: GLenum,
+        binary: *const ::std::os::raw::c_void,
+        length: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glProgramBinary({},{},{},{})",
+            program, binaryFormat, binary as usize, length
+        ))
+    }
+
+    pub unsafe fn glProgramParameteri(program: GLuint, pname: GLenum, value: GLint) {
+        eval(format!(
+            "importObject.env.glProgramParameteri({},{},{})",
+            program, pname, value
+        ))
+    }
+
+    pub unsafe fn glInvalidateFramebuffer(
+        target: GLenum,
+        numAttachments: GLsizei,
+        attachments: *const GLenum,
+    ) {
+        eval(format!(
+            "importObject.env.glInvalidateFramebuffer({},{},{})",
+            target, numAttachments, attachments as usize
+        ))
+    }
+
+    pub unsafe fn glInvalidateSubFramebuffer(
+        target: GLenum,
+        numAttachments: GLsizei,
+        attachments: *const GLenum,
+        x: GLint,
+        y: GLint,
+        width: GLsizei,
+        height: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glInvalidateSubFramebuffer({},{},{},{},{},{},{})",
+            target, numAttachments, attachments as usize, x, y, width, height
+        ))
+    }
+
+    pub unsafe fn glTexStorage2D(
+        target: GLenum,
+        levels: GLsizei,
+        internalformat: GLenum,
+        width: GLsizei,
+        height: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glTexStorage2D({},{},{},{},{})",
+            target, levels, internalformat, width, height
+        ))
+    }
+
+    pub unsafe fn glTexStorage3D(
+        target: GLenum,
+        levels: GLsizei,
+        internalformat: GLenum,
+        width: GLsizei,
+        height: GLsizei,
+        depth: GLsizei,
+    ) {
+        eval(format!(
+            "importObject.env.glTexStorage3D({},{},{},{},{},{})",
+            target, levels, internalformat, width, height, depth
+        ))
+    }
+
+    pub unsafe fn glGetInternalformativ(
+        target: GLenum,
+        internalformat: GLenum,
+        pname: GLenum,
+        bufSize: GLsizei,
+        params: *mut GLint,
+    ) {
+        eval(format!(
+            "importObject.env.glGetInternalformativ({},{},{},{},{})",
+            target, internalformat, pname, bufSize, params as usize
+        ))
+    }
 }
 
 pub unsafe fn is_gl2() -> bool {

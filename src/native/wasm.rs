@@ -105,6 +105,7 @@ pub unsafe fn sapp_height() -> ::std::os::raw::c_int {
     canvas_height()
 }
 
+#[cfg(not(target_os = "emscripten"))]
 extern "C" {
     pub fn setup_canvas_size(high_dpi: bool);
     pub fn run_animation_loop(blocking: bool);
@@ -136,6 +137,186 @@ extern "C" {
     pub fn sapp_schedule_update();
     pub fn init_webgl(version: i32);
     pub fn now() -> f64;
+}
+
+#[cfg(target_os = "emscripten")]
+use self::emscripten::eval;
+#[cfg(target_os = "emscripten")]
+pub use self::emscripten::exports::*;
+#[cfg(target_os = "emscripten")]
+mod emscripten {
+    use emscripten_functions::emscripten::{run_script, run_script_int, run_script_string};
+
+    trait FromJS {
+        fn from_js<T: AsRef<str>>(js: T) -> Self;
+    }
+
+    impl FromJS for () {
+        fn from_js<T: AsRef<str>>(js: T) -> Self {
+            run_script(js)
+        }
+    }
+
+    impl FromJS for bool {
+        fn from_js<T: AsRef<str>>(js: T) -> Self {
+            match run_script_string(js) {
+                Some(s) => match s.as_str() {
+                    "false" | "0" | "" => false,
+                    _ => true,
+                },
+                None => false,
+            }
+        }
+    }
+
+    impl FromJS for u8 {
+        fn from_js<T: AsRef<str>>(js: T) -> Self {
+            run_script_int(js) as _
+        }
+    }
+
+    impl FromJS for i32 {
+        fn from_js<T: AsRef<str>>(js: T) -> Self {
+            run_script_int(js)
+        }
+    }
+
+    impl FromJS for u32 {
+        fn from_js<T: AsRef<str>>(js: T) -> Self {
+            match run_script_string(js) {
+                Some(s) => s.parse().unwrap_or(0),
+                None => 0,
+            }
+        }
+    }
+
+    impl FromJS for usize {
+        fn from_js<T: AsRef<str>>(js: T) -> Self {
+            match run_script_string(js) {
+                Some(s) => s.parse().unwrap_or(0),
+                None => 0,
+            }
+        }
+    }
+
+    impl FromJS for f32 {
+        fn from_js<T: AsRef<str>>(js: T) -> Self {
+            match run_script_string(js) {
+                Some(s) => s.parse().unwrap_or(Self::NAN),
+                None => Self::NAN,
+            }
+        }
+    }
+
+    impl FromJS for f64 {
+        fn from_js<T: AsRef<str>>(js: T) -> Self {
+            match run_script_string(js) {
+                Some(s) => s.parse().unwrap_or(Self::NAN),
+                None => Self::NAN,
+            }
+        }
+    }
+
+    #[allow(private_bounds)]
+    pub(super) fn eval<T: FromJS, U: AsRef<str>>(js: U) -> T {
+        T::from_js(js)
+    }
+
+    pub mod exports {
+        use super::eval;
+
+        pub unsafe fn setup_canvas_size(high_dpi: bool) {
+            eval(format!("importObject.env.setup_canvas_size({})", high_dpi))
+        }
+
+        pub unsafe fn run_animation_loop(blocking: bool) {
+            eval(format!("importObject.env.run_animation_loop({})", blocking))
+        }
+
+        pub unsafe fn canvas_width() -> i32 {
+            eval("importObject.env.canvas_width()")
+        }
+
+        pub unsafe fn canvas_height() -> i32 {
+            eval("importObject.env.canvas_height()")
+        }
+
+        pub unsafe fn dpi_scale() -> f32 {
+            eval("importObject.env.dpi_scale()")
+        }
+
+        pub unsafe fn console_debug(msg: *const ::std::os::raw::c_char) {
+            eval(format!("importObject.env.console_debug({})", msg as usize))
+        }
+
+        pub unsafe fn console_log(msg: *const ::std::os::raw::c_char) {
+            eval(format!("importObject.env.console_log({})", msg as usize))
+        }
+
+        pub unsafe fn console_info(msg: *const ::std::os::raw::c_char) {
+            eval(format!("importObject.env.console_info({})", msg as usize))
+        }
+
+        pub unsafe fn console_warn(msg: *const ::std::os::raw::c_char) {
+            eval(format!("importObject.env.console_warn({})", msg as usize))
+        }
+
+        pub unsafe fn console_error(msg: *const ::std::os::raw::c_char) {
+            eval(format!("importObject.env.console_error({})", msg as usize))
+        }
+
+        pub unsafe fn sapp_set_clipboard(clipboard: *const i8, len: usize) {
+            eval(format!(
+                "importObject.env.sapp_set_clipboard({},{})",
+                clipboard as usize, len
+            ))
+        }
+
+        pub unsafe fn sapp_set_cursor_grab(grab: bool) {
+            eval(format!("importObject.env.sapp_set_cursor_grab({})", grab))
+        }
+
+        pub unsafe fn sapp_set_cursor(cursor: *const u8, len: usize) {
+            eval(format!(
+                "importObject.env.sapp_set_cursor({},{})",
+                cursor as usize, len
+            ))
+        }
+
+        pub unsafe fn sapp_is_elapsed_timer_supported() -> bool {
+            eval("importObject.env.sapp_is_elapsed_timer_supported()")
+        }
+
+        pub unsafe fn sapp_set_fullscreen(fullscreen: bool) {
+            eval(format!(
+                "importObject.env.sapp_set_fullscreen({})",
+                fullscreen
+            ))
+        }
+
+        pub unsafe fn sapp_is_fullscreen() -> bool {
+            eval("importObject.env.sapp_is_fullscreen()")
+        }
+
+        pub unsafe fn sapp_set_window_size(new_width: u32, new_height: u32) {
+            eval(format!(
+                "importObject.env.sapp_set_window_size({},{})",
+                new_width, new_height
+            ))
+        }
+
+        pub unsafe fn sapp_schedule_update() {
+            eval("importObject.env.sapp_schedule_update()")
+        }
+
+        pub unsafe fn init_webgl(version: i32) {
+            eval(format!("importObject.env.init_webgl({})", version))
+        }
+
+        pub unsafe fn now() -> f64 {
+            eval("importObject.env.now()")
+        }
+    }
 }
 
 unsafe fn show_mouse(shown: bool) {
