@@ -420,18 +420,13 @@ function _webglGet(name_, p, type) {
 var Module;
 var wasm_exports;
 
-function resize(canvas, on_resize) {
+function resize(canvas) {
     var dpr = dpi_scale();
     var displayWidth = canvas.clientWidth * dpr;
     var displayHeight = canvas.clientHeight * dpr;
 
-    if (canvas.width != displayWidth ||
-        canvas.height != displayHeight) {
-        canvas.width = displayWidth;
-        canvas.height = displayHeight;
-        if (on_resize != undefined)
-            on_resize(Math.floor(displayWidth), Math.floor(displayHeight))
-    }
+    canvas.width = displayWidth;
+    canvas.height = displayHeight;
 }
 
 function animation() {
@@ -1264,8 +1259,15 @@ var importObject = {
                 }
             });
 
+            new ResizeObserver(() => {
+                let dpr = dpi_scale();
+                let width = Math.floor(canvas.clientWidth * dpr);
+                let height = Math.floor(canvas.clientHeight * dpr);
+                wasm_exports.resize?.(width, height);
+            }).observe(canvas);
+
             window.onresize = function () {
-                resize(canvas, wasm_exports.resize);
+                resize(canvas);
             };
             window.addEventListener("copy", function (e) {
                 if (clipboard != null) {
@@ -1407,7 +1409,7 @@ var importObject = {
         sapp_set_window_size: function (new_width, new_height) {
             canvas.width = new_width;
             canvas.height = new_height;
-            resize(canvas, wasm_exports.resize);
+            resize(canvas);
         },
         sapp_schedule_update: function () {
             if (animation_frame_timeout) {
